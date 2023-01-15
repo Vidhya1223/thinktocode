@@ -1,0 +1,4 @@
+1. https://www.hl7.org/fhir/patient.html
+2. https://github.com/emisgroup/exa-backend-eng-assessment/blob/master/README.md
+3. vidhya : vidhya@22
+4. https://www.healthit.gov/api-education-module/story_content/external_files/hhs_transcript_module.pdf
