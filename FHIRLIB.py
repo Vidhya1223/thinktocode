@@ -40,7 +40,9 @@ class FHIR :
 		self.CLAIM = pd.DataFrame(columns=['ClaimProvider', 'ClaimInsurance', 'ClaimDate', 'ClaimType','ClaimItem', 'ClaimUSD', 'PatientUID'])
 		self.IMMUNIZATION = pd.DataFrame(columns=['Immunization', 'ImmunizationDates', 'PatientUID'])
 
-		file_path = 'D:\\EMIS_Assessment\\FHIRDATA\\'
+		file_path = 'D:\\emisassessment\\FHIRDATA\\'
+		#os.append('../FHIRDATA')
+		#file_path = '../FHIRDATA/'
 		files = os.listdir(file_path)
 		for file in files :
 			f = open(file_path+file, encoding='utf-8')
