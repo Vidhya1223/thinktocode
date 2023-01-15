@@ -11,15 +11,10 @@ def greeting():
 		data = "Greetings. "
 		return jsonify({'data': data})
 
-#curl http://127.0.0.1:5000/home/10
-@app.route('/home/<int:num>', methods = ['GET'])
-def disp(num):
 
-	return jsonify({'data': num**2})
-
-#curl http://127.0.0.1:5000/home/10
-@app.route('/patient', methods = ['GET'])
-def gene():
+#curl http://127.0.0.1:5000/patient?patient_id=8c95253e-8ee8-9ae8-6d40-021d702dc78e
+@app.route('/patientinfo', methods = ['GET'])
+def get_patient_details():
 	
 	id = request.args.get('patient_id')
 	info = fhir.PATIENT[fhir.PATIENT.PatientUID == id]
@@ -31,8 +26,86 @@ def gene():
 	else :
 		return jsonify({'data': "No data found"})
 
-
+@app.route('/patientconditions', methods = ['GET'])
+def get_patient_conditions():
 	
+	id = request.args.get('patient_id')
+	info = fhir.CONDITION[fhir.CONDITION.PatientUID == id]["ConditionText", "ConditionOnsetDates"]
+	#print(info, id)
+	if len(info.index) > 0 :
+		details = info.to_json()
+		print(details)
+		return jsonify({'data' : details})
+	else :
+		return jsonify({'data': "No data found"})
+
+@app.route('/patientobservations', methods = ['GET'])
+def get_patient_observations():
+	
+	id = request.args.get('patient_id')
+	info = fhir.OBSERVATION[fhir.OBSERVATION.PatientUID == id]
+	print(info, id)
+	if len(info.index) > 0 :
+		details = info.filter(["ObservationText", "ObservationValue", "ObservationUnit", "ObservationDate"]).to_json()
+		print(details)
+		return jsonify({'data' : details})
+	else :
+		return jsonify({'data': "No data found"})
+
+@app.route('/patientmedication', methods = ['GET'])
+def get_patient_medications():
+	
+	id = request.args.get('patient_id')
+	info = fhir.MEDICATION[fhir.MEDICATION.PatientUID == id]
+	print(info, id)
+	if len(info.index) > 0 :
+		details = info.filter(["MedicationText", "MedicationDates"]).to_json()
+		print(details)
+		return jsonify({'data' : details})
+	else :
+		return jsonify({'data': "No data found"})
+
+@app.route('/patientprocedure', methods = ['GET'])
+def get_patient_prodecure():
+	
+	id = request.args.get('patient_id')
+	info = fhir.PROCEDURE[fhir.PROCEDURE.PatientUID == id]
+	print(info, id)
+	if len(info.index) > 0 :
+		details = info.filter(["ProcedureText", "ProcedureDates"]).to_json()
+		print(details)
+		return jsonify({'data' : details})
+	else :
+		return jsonify({'data': "No data found"})
+
+@app.route('/patientencounter', methods = ['GET'])
+def get_patient_encounter():
+	
+	id = request.args.get('patient_id')
+	info = fhir.ENCOUNTER[fhir.ENCOUNTER.PatientUID == id]
+	print(info, id)
+	if len(info.index) > 0 :
+		details = info.filter(['EncountersText', 'EncounterLocation', 'EncounterProvider','EncounterDates']).to_json()
+		print(details)
+		return jsonify({'data' : details})
+	else :
+		return jsonify({'data': "No data found"})
+	
+@app.route('/patienteclaim', methods = ['GET'])
+def get_patient_claim():
+	
+	id = request.args.get('patient_id')
+	info = fhir.CLAIM[fhir.CLAIM.PatientUID == id]
+	print(info, id)
+	if len(info.index) > 0 :
+		details = info.filter(['ClaimProvider', 'ClaimInsurance', 'ClaimDate', 'ClaimType','ClaimItem', 'ClaimUSD']).to_json()
+		print(details)
+		return jsonify({'data' : details})
+	else :
+		return jsonify({'data': "No data found"})
+
+
+
 if __name__ == '__main__':
 
 	fhir.load_data()
